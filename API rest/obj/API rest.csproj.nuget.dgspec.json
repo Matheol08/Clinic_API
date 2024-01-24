@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mathe\\OneDrive\\Documents\\Projet Annuaire\\Annuaire_Entreprise_API\\API rest\\API rest\\API rest.csproj": {}
+    "C:\\Users\\mlesenne\\Documents\\papier perso\\Clinic\\Clinic_API\\Clinic_API\\API rest\\API rest.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mathe\\OneDrive\\Documents\\Projet Annuaire\\Annuaire_Entreprise_API\\API rest\\API rest\\API rest.csproj": {
+    "C:\\Users\\mlesenne\\Documents\\papier perso\\Clinic\\Clinic_API\\Clinic_API\\API rest\\API rest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mathe\\OneDrive\\Documents\\Projet Annuaire\\Annuaire_Entreprise_API\\API rest\\API rest\\API rest.csproj",
+        "projectUniqueName": "C:\\Users\\mlesenne\\Documents\\papier perso\\Clinic\\Clinic_API\\Clinic_API\\API rest\\API rest.csproj",
         "projectName": "API rest",
-        "projectPath": "C:\\Users\\mathe\\OneDrive\\Documents\\Projet Annuaire\\Annuaire_Entreprise_API\\API rest\\API rest\\API rest.csproj",
-        "packagesPath": "C:\\Users\\mathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mathe\\OneDrive\\Documents\\Projet Annuaire\\Annuaire_Entreprise_API\\API rest\\API rest\\obj\\",
+        "projectPath": "C:\\Users\\mlesenne\\Documents\\papier perso\\Clinic\\Clinic_API\\Clinic_API\\API rest\\API rest.csproj",
+        "packagesPath": "C:\\Users\\mlesenne\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mlesenne\\Documents\\papier perso\\Clinic\\Clinic_API\\Clinic_API\\API rest\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mathe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mlesenne\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -70,6 +70,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.25, 6.0.25]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[6.0.25, 6.0.25]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.25, 6.0.25]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.25, 6.0.25]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -78,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

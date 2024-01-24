@@ -19,7 +19,7 @@ namespace SalarieContrôleur
         }
 
         [HttpGet]//récupère tous les salaries
-            public async Task<ActionResult<IEnumerable<Salaries>>> GetSalaries()
+            public async Task<ActionResult<IEnumerable<Medecins>>> GetSalaries()
         {
             var salariesWithSitesAndService = await _SalarieContext.Salaries
                 .Include(s => s.Sites)
@@ -31,9 +31,9 @@ namespace SalarieContrôleur
 
 
         [HttpGet("RechercheNometPrenom")] //Search by Name et FirstName
-        public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesBySearchTerm(string searchTerm)
+        public async Task<ActionResult<IEnumerable<Medecins>>> GetSalariesBySearchTerm(string searchTerm)
         {
-            IQueryable<Salaries> query = _SalarieContext.Salaries;
+            IQueryable<v> query = _SalarieContext.Salaries;
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -47,9 +47,9 @@ namespace SalarieContrôleur
 
 
         [HttpGet("rechercheSite")]//recherche par site
-        public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesBySite(string ville)
+        public async Task<ActionResult<IEnumerable<v>>> GetSalariesBySite(string ville)
         {
-            IQueryable<Salaries> query = _SalarieContext.Salaries;
+            IQueryable<Medecins> query = _SalarieContext.Salaries;
 
             
             if (!string.IsNullOrEmpty(ville))
@@ -64,9 +64,9 @@ namespace SalarieContrôleur
             return Ok(result);
         }
         [HttpGet("rechercheSiteEtService")] //recherche de salarié par Site et Service
-        public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesBySiteAndService(string ville, string nomService)
+        public async Task<ActionResult<IEnumerable<Medecins>>> GetSalariesBySiteAndService(string ville, string nomService)
         {
-            IQueryable<Salaries> query = _SalarieContext.Salaries;
+            IQueryable<Medecins> query = _SalarieContext.Salaries;
 
             if (!string.IsNullOrEmpty(ville))
             {
@@ -86,9 +86,9 @@ namespace SalarieContrôleur
 
 
         [HttpGet("rechercheService")] //Recherche par Service
-        public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesByService(string Nom_Service)
+        public async Task<ActionResult<IEnumerable<Medecins>>> GetSalariesByService(string Nom_Service)
         {
-            IQueryable<Salaries> query = _SalarieContext.Salaries;
+            IQueryable<Medecins> query = _SalarieContext.Salaries;
 
 
             if (!string.IsNullOrEmpty(Nom_Service))
@@ -104,9 +104,9 @@ namespace SalarieContrôleur
         }
 
         [HttpGet("{id}")] //recherche by id Salarie
-        public async Task<ActionResult<Salaries>> GetSalarieById(int ID)
+        public async Task<ActionResult<Medecins>> GetSalarieById(int ID)
         {
-            var salarie = await _SalarieContext.Salaries.Where(c => c.IDSalaries.Equals(ID)).FirstOrDefaultAsync();
+            var salarie = await _SalarieContext.Salaries.Where(c => c.IdMedecin.Equals(ID)).FirstOrDefaultAsync();
             if (salarie == null)
             {
                 return NotFound();
@@ -115,11 +115,11 @@ namespace SalarieContrôleur
         }
 
         [HttpPost] //insert salarie
-        public async Task<ActionResult<Salaries>> CreateSalarie(Ajout_Salaries ajoutSalarie)
+        public async Task<ActionResult<Medecins>> CreateSalarie(Ajout_Salaries ajoutSalarie)
         {
             try
             {
-                Salaries salarie = new Salaries
+                Medecins salarie = new Medecins
                 {
                     Nom = ajoutSalarie.Nom,
                     Prenom = ajoutSalarie.Prenom,
@@ -133,7 +133,7 @@ namespace SalarieContrôleur
                 _SalarieContext.Salaries.Add(salarie);
                 await _SalarieContext.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetSalarieById), new { id = salarie.IDSalaries }, salarie);
+                return CreatedAtAction(nameof(GetSalarieById), new { id = salarie.IdMedecin }, salarie);
             }
             catch (Exception ex)
             {
@@ -158,7 +158,7 @@ namespace SalarieContrôleur
         }
 
         [HttpPut("{id}")] //Mettre à jour by ID
-        public async Task<IActionResult> UpdateSalarie(int ID, Salaries salarie)
+        public async Task<IActionResult> UpdateSalarie(int ID, Medecins salarie)
         {
             if (!ID.Equals(salarie.IDSalaries))
             {
