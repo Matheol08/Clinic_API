@@ -67,7 +67,7 @@ using ModelsService;
                     {
                         return NotFound($"Service Employe with Id ={id} not found");
                     }
-                    serviceEmployeToUpdate.Nom_Service = serviceEmploye.Nom_Service;
+                    serviceEmployeToUpdate.Nom = serviceEmploye.Nom;
                     await _contextMedecinss.SaveChangesAsync();
                     return NoContent();
                 }
