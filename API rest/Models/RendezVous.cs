@@ -1,19 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ModelsSite;
-using ModelsService;
+using ModelsSpecialites;
+using ModelsRendezVous;
 using System.Security.Policy;
 
-namespace ModelsSalarie
+namespace ModelsRendezVous
 {
     public class RendezVous
     {
         [Required]
         [Key]
         public int IdRendezVous { get; set; }
-        [ForeignKey("IdPatient")]
+        [ForeignKey("Patients")]
         public int IdPatient { get; set; }
-        [ForeignKey("IdMedecin")]
+        [ForeignKey("Medecins")]
 
         public int MedecinId { get; set; }
         public DateTime DateDebut { get; set; }

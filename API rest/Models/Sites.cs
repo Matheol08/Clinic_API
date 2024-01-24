@@ -1,8 +1,7 @@
 ﻿using API_rest.Contexts;
-using ModelsSalarie;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelsSite
+namespace ModelsSpecialites
 {
     public class Specialites
     {

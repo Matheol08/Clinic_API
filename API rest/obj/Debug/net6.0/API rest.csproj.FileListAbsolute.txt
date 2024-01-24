@@ -520,3 +520,14 @@ C:\Users\mathe\OneDrive\Documents\Projet Annuaire\Annuaire_Entreprise_API\API re
 C:\Users\mathe\OneDrive\Documents\Projet Annuaire\Annuaire_Entreprise_API\API rest\API rest\obj\Debug\net6.0\API rest.pdb
 C:\Users\mathe\OneDrive\Documents\Projet Annuaire\Annuaire_Entreprise_API\API rest\API rest\obj\Debug\net6.0\API rest.genruntimeconfig.cache
 C:\Users\mathe\OneDrive\Documents\Projet Annuaire\Annuaire_Entreprise_API\API rest\API rest\obj\Debug\net6.0\ref\API rest.dll
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.csproj.AssemblyReference.cache
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.AssemblyInfoInputs.cache
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.AssemblyInfo.cs
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.csproj.CoreCompileInputs.cache
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.sourcelink.json
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.dll
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\refint\API rest.dll
+C:\Users\mlesenne\Documents\papier perso\Clinic\Clinic_API\Clinic_API\API rest\obj\Debug\net6.0\API rest.pdb

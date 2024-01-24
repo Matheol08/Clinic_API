@@ -1,7 +1,7 @@
 ﻿using API_rest.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ModelsService;
+using ModelsMedecins;
 
     namespace API_rest.Contrôleurs.Service
     {
@@ -10,14 +10,14 @@ using ModelsService;
 
             public class ServiceEmployeController : ControllerBase
             {
-                private readonly AnnuaireContext _contextMedecinss;
+                private readonly ClinicContext _contextMedecinss;
 
-                public ServiceEmployeController(AnnuaireContext context)
+                public ServiceEmployeController(ClinicContext context)
                 {
                     _contextMedecinss = context;
                 }
 
-                [HttpGet] //get all Services
+                [HttpGet] 
                 public async Task<ActionResult<IEnumerable<Medecins>>> GetServiceEmployes()
                 {
                     return await _contextMedecinss.Medecins.ToListAsync();
@@ -34,29 +34,29 @@ using ModelsService;
                     return Ok(serviceEmploye);
                 }
 
-                [HttpPost] //insert un service
-                public async Task<ActionResult<Medecins>> CreateServiceEmploye(Medecins serviceEmploye)
+                [HttpPost] 
+                public async Task<ActionResult<Medecins>> CreateServiceEmploye(Medecins Medecins)
                 {
-                    _contextMedecinss.Medecins.Add(serviceEmploye);
+                    _contextMedecinss.Medecins.Add(Medecins);
                     await _contextMedecinss.SaveChangesAsync();
-                    return CreatedAtAction(nameof(GetServiceEmployeById), new { id = serviceEmploye.IdMedecin }, serviceEmploye);
+                    return CreatedAtAction(nameof(GetServiceEmployeById), new { id = Medecins.IdMedecin }, Medecins);
                 }
 
-                [HttpDelete("{id}")] //Delete by ID un service
-                public async Task<IActionResult> DeleteServiceEmploye(int ID)
+                [HttpDelete("{id}")]
+                public async Task<IActionResult> DeleteMedecins(int ID)
                 {
-                    var serviceEmploye = await _contextMedecinss.Medecins.FindAsync(ID);
-                    if (serviceEmploye == null)
+                    var Medecins = await _contextMedecinss.Medecins.FindAsync(ID);
+                    if (Medecins == null)
                     {
                         return NotFound();
                     }
-                    _contextMedecinss.Medecins.Remove(serviceEmploye);
+                    _contextMedecinss.Medecins.Remove(Medecins);
                     await _contextMedecinss.SaveChangesAsync();
                     return NoContent();
                 }
 
-                [HttpPut("{id}")] //mettre à jour Service
-                public async Task<IActionResult> UpdateServiceEmploye(int id, Medecins serviceEmploye)
+                [HttpPut("{id}")] 
+                public async Task<IActionResult> UpdateMedecins(int id, Medecins serviceEmploye)
                 {
                     if (!id.Equals(serviceEmploye.IdMedecin))
                     {

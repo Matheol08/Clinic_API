@@ -1,8 +1,8 @@
-﻿using ModelsSalarie;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsService
+namespace ModelsMedecins
 {
     public class Medecins
     {

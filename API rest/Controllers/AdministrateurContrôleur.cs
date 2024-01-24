@@ -9,9 +9,9 @@ namespace API_rest.Controllers
 
     public class AdminController : ControllerBase
     {
-        private readonly AnnuaireContext _Admin_Employes;
+        private readonly ClinicContext _Admin_Employes;
 
-        public AdminController(AnnuaireContext context)
+        public AdminController(ClinicContext context)
         {
             _Admin_Employes = context;
         }

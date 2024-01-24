@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelsAdmin;
-using ModelsSalarie;
-using ModelsService;
-using ModelsSite;
-using WpfApp08.Models2;
+using ModelsRendezVous;
+using ModelsMedecins;
+using ModelsSpecialites;
+using ModelsPatients;
 namespace API_rest.Contexts
 {
-    public class AnnuaireContext : DbContext
+    public class ClinicContext : DbContext
     {
 
-        public AnnuaireContext(DbContextOptions<AnnuaireContext> options)
+        public ClinicContext(DbContextOptions<ClinicContext> options)
             : base(options)
         {
         

@@ -1,139 +1,138 @@
 ﻿using API_rest.Contexts;
 using Microsoft.AspNetCore.Mvc;
-using ModelsSalarie;
+using ModelsRendezVous;
+using ModelsMedecins;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Azure;
+using ModelsPatients;
 
-namespace SalarieContrôleur
+namespace RendezVousController
 {
     [ApiController]
-    [Route("api/salaries")]
-    public class SalariesController : ControllerBase
+    [Route("api/RendezVous")]
+    public class RendezVousController : ControllerBase
     {
-        private readonly AnnuaireContext _SalarieContext;
+        private readonly ClinicContext _RendezVousContext;
 
-        public SalariesController(AnnuaireContext context)
+        public RendezVousController(ClinicContext context)
         {
-            _SalarieContext = context;
+            _RendezVousContext = context;
         }
 
-        [HttpGet]//récupère tous les salaries
-            public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalaries()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVous()
         {
-            var salariesWithSitesAndService = await _SalarieContext.Salaries
-                .Include(s => s.Sites)
+            var RendezVousAvecPatientsETMedecins = await _RendezVousContext.RendezVous
+                .Include(s => s.Patients)
                 .Include(s => s.Medecins)
                 .ToListAsync();
 
-            return Ok(salariesWithSitesAndService);
+            return Ok(RendezVousAvecPatientsETMedecins);
         }
 
 
-        [HttpGet("RechercheNometPrenom")] //Search by Name et FirstName
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalariesBySearchTerm(string searchTerm)
+        [HttpGet("Date")]// Date
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussBySearchTerm(string searchTerm)
         {
-            IQueryable<v> query = _SalarieContext.Salaries;
+            IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(s => EF.Functions.Like(s.Nom, searchTerm + "%") || EF.Functions.Like(s.Prenom, searchTerm + "%"));
             }
 
-            var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
+            var result = await query.Include(s => s.IdPatient).Include(s => s.MedecinId).ToListAsync();
 
             return Ok(result);
         }
 
 
-        [HttpGet("rechercheSite")]//recherche par site
-        public async Task<ActionResult<IEnumerable<v>>> GetSalariesBySite(string ville)
+        [HttpGet("recherchePatient")]
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVousByPatients(string NomPatient)
         {
-            IQueryable<RendezVous> query = _SalarieContext.Salaries;
+            IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
             
-            if (!string.IsNullOrEmpty(ville))
+            if (!string.IsNullOrEmpty(NomPatient))
             {
-                query = query.Where(s => s.Sites.Ville == ville);
+                query = query.Where(s => s.Patients.Patients == NomPatient);
             }
-
             
 
-               var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
+                var result = await query.Include(s => s.IdPatient).Include(s => s.MedecinId).ToListAsync();
 
             return Ok(result);
         }
-        [HttpGet("rechercheSiteEtService")] //recherche de salarié par Site et Service
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalariesBySiteAndService(string ville, string nomService)
+        [HttpGet("recherchePatientsEtMedecin)")] 
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussBySiteAndService(string Libelle, string nomMedecin)
         {
-            IQueryable<RendezVous> query = _SalarieContext.Salaries;
+            IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
-            if (!string.IsNullOrEmpty(ville))
+            if (!string.IsNullOrEmpty(Libelle))
             {
-                query = query.Where(s => s.Sites.Ville == ville);
+                query = query.Where(s => s.IdPatient.Nom == Libelle);
             }
 
-            if (!string.IsNullOrEmpty(nomService))
+            if (!string.IsNullOrEmpty(nomMedecin))
             {
-                query = query.Where(s => s.Medecins.Nom_Service == nomService);
+                query = query.Where(s => s.MedecinId.Nom == nomMedecin);
             }
 
-            var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
-
-            return Ok(result);
-        }
-
-
-
-        [HttpGet("rechercheService")] //Recherche par Service
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalariesByService(string Nom_Service)
-        {
-            IQueryable<RendezVous> query = _SalarieContext.Salaries;
-
-
-            if (!string.IsNullOrEmpty(Nom_Service))
-            {
-                query = query.Where(s => s.Medecins.Nom_Service == Nom_Service);
-            }
-
-
-
-            var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
+            var result = await query.Include(s => s.Patients).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
 
-        [HttpGet("{id}")] //recherche by id Salarie
-        public async Task<ActionResult<RendezVous>> GetSalarieById(int ID)
+
+
+        [HttpGet("rechercheMedecin")] //Recherche par Medecin
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussByService(string Nom)
         {
-            var salarie = await _SalarieContext.Salaries.Where(c => c.IdMedecin.Equals(ID)).FirstOrDefaultAsync();
-            if (salarie == null)
+            IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
+
+
+            if (!string.IsNullOrEmpty(Nom))
+            {
+                query = query.Where(s => s.IdMedecin.Nom == Nom);
+            }
+
+
+
+            var result = await query.Include(s => s.Specialites).Include(s => s.Medecins).ToListAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")] //recherche by id RendezVous
+        public async Task<ActionResult<RendezVous>> GetRendezVousById(int ID)
+        {
+            var RendezVous = await _RendezVousContext.RendezVous.Where(c => c.IdRendezVous.Equals(ID)).FirstOrDefaultAsync();
+            if (RendezVous == null)
             {
                 return NotFound();
             }
-            return Ok(salarie);
+            return Ok(RendezVous);
         }
 
-        [HttpPost] //insert salarie
-        public async Task<ActionResult<RendezVous>> CreateSalarie(Ajout_Salaries ajoutSalarie)
+        [HttpPost] 
+        public async Task<ActionResult<RendezVous>> CreateRendezVous(RendezVous RendezVous)
         {
             try
             {
-                RendezVous salarie = new RendezVous
+                RendezVous ajoutRendezVous = new RendezVous
                 {
-                    Nom = ajoutSalarie.Nom,
-                    Prenom = ajoutSalarie.Prenom,
-                    Email = ajoutSalarie.Email,
-                    Telephone_portable = ajoutSalarie.Telephone_portable,
-                    Telephone_fixe = ajoutSalarie.Telephone_fixe,
-                    IDSite = ajoutSalarie.IDSite,
-                    IDService = ajoutSalarie.IDService
+                    IdPatient = RendezVous.IdPatient,
+                    MedecinId = RendezVous.MedecinId,
+                    DateDebut = RendezVous.DateDebut,
+                    DateFin = RendezVous.DateFin,
+                    InfosComplementaires = RendezVous.InfosComplementaires
                 };
 
-                _SalarieContext.Salaries.Add(salarie);
-                await _SalarieContext.SaveChangesAsync();
+                _RendezVousContext.RendezVous.Add(RendezVous);
+                await _RendezVousContext.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetSalarieById), new { id = salarie.IdMedecin }, salarie);
+                return CreatedAtAction(nameof(GetRendezVousById), new { id = RendezVous.IdRendezVous }, RendezVous);
             }
             catch (Exception ex)
             {
@@ -145,38 +144,36 @@ namespace SalarieContrôleur
 
 
         [HttpDelete("{id}")] //Delete by ID
-        public async Task<IActionResult> DeleteSalarie(int ID)
+        public async Task<IActionResult> DeleteRendezVous(int ID)
         {
-            var salarie = await _SalarieContext.Salaries.FindAsync(ID);
-            if (salarie == null)
+            var RendezVous = await _RendezVousContext.RendezVous.FindAsync(ID);
+            if (RendezVous == null)
             {
                 return NotFound();
             }
-            _SalarieContext.Salaries.Remove(salarie);
-            await _SalarieContext.SaveChangesAsync();
+            _RendezVousContext.RendezVous.Remove(RendezVous);
+            await _RendezVousContext.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPut("{id}")] //Mettre à jour by ID
-        public async Task<IActionResult> UpdateSalarie(int ID, RendezVous salarie)
+        public async Task<IActionResult> UpdateRendezVous(int ID, RendezVous RendezVous)
         {
-            if (!ID.Equals(salarie.IDSalaries))
+            if (!ID.Equals(RendezVous.IdRendezVous))
             {
                 return BadRequest("ID's are different");
             }
-            var salarieToUpdate = await _SalarieContext.Salaries.FindAsync(ID);
-            if (salarieToUpdate == null)
+            var RendezVousToUpdate = await _RendezVousContext.RendezVous.FindAsync(ID);
+            if (RendezVousToUpdate == null)
             {
-                return NotFound($"Salarie with Id ={ID} not found");
+                return NotFound($"RendezVous with Id ={ID} not found");
             }
-            salarieToUpdate.Nom = salarie.Nom;
-            salarieToUpdate.Prenom = salarie.Prenom;
-            salarieToUpdate.Telephone_fixe = salarie.Telephone_fixe;
-            salarieToUpdate.Telephone_portable = salarie.Telephone_portable;
-            salarieToUpdate.Email = salarie.Email;
-            salarieToUpdate.IDService = salarie.IDService;
-            salarieToUpdate.IDSite = salarie.IDSite;
-            await _SalarieContext.SaveChangesAsync();
+            RendezVousToUpdate.IdPatient = RendezVous.IdPatient;
+            RendezVousToUpdate.MedecinId = RendezVous.MedecinId;
+            RendezVousToUpdate.DateDebut = RendezVous.DateDebut;
+            RendezVousToUpdate.DateFin = RendezVous.DateFin;
+            RendezVousToUpdate.InfosComplementaires = RendezVous.InfosComplementaires;
+            await _RendezVousContext.SaveChangesAsync();
             return NoContent();
         }
        
