@@ -19,11 +19,11 @@ namespace SalarieContrôleur
         }
 
         [HttpGet]//récupère tous les salaries
-            public async Task<ActionResult<IEnumerable<Medecins>>> GetSalaries()
+            public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalaries()
         {
             var salariesWithSitesAndService = await _SalarieContext.Salaries
                 .Include(s => s.Sites)
-                .Include(s => s.Service_Employe)
+                .Include(s => s.Medecins)
                 .ToListAsync();
 
             return Ok(salariesWithSitesAndService);
@@ -31,7 +31,7 @@ namespace SalarieContrôleur
 
 
         [HttpGet("RechercheNometPrenom")] //Search by Name et FirstName
-        public async Task<ActionResult<IEnumerable<Medecins>>> GetSalariesBySearchTerm(string searchTerm)
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalariesBySearchTerm(string searchTerm)
         {
             IQueryable<v> query = _SalarieContext.Salaries;
 
@@ -40,7 +40,7 @@ namespace SalarieContrôleur
                 query = query.Where(s => EF.Functions.Like(s.Nom, searchTerm + "%") || EF.Functions.Like(s.Prenom, searchTerm + "%"));
             }
 
-            var result = await query.Include(s => s.Sites).Include(s => s.Service_Employe).ToListAsync();
+            var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
@@ -49,7 +49,7 @@ namespace SalarieContrôleur
         [HttpGet("rechercheSite")]//recherche par site
         public async Task<ActionResult<IEnumerable<v>>> GetSalariesBySite(string ville)
         {
-            IQueryable<Medecins> query = _SalarieContext.Salaries;
+            IQueryable<RendezVous> query = _SalarieContext.Salaries;
 
             
             if (!string.IsNullOrEmpty(ville))
@@ -59,14 +59,14 @@ namespace SalarieContrôleur
 
             
 
-               var result = await query.Include(s => s.Sites).Include(s => s.Service_Employe).ToListAsync();
+               var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
         [HttpGet("rechercheSiteEtService")] //recherche de salarié par Site et Service
-        public async Task<ActionResult<IEnumerable<Medecins>>> GetSalariesBySiteAndService(string ville, string nomService)
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalariesBySiteAndService(string ville, string nomService)
         {
-            IQueryable<Medecins> query = _SalarieContext.Salaries;
+            IQueryable<RendezVous> query = _SalarieContext.Salaries;
 
             if (!string.IsNullOrEmpty(ville))
             {
@@ -75,10 +75,10 @@ namespace SalarieContrôleur
 
             if (!string.IsNullOrEmpty(nomService))
             {
-                query = query.Where(s => s.Service_Employe.Nom_Service == nomService);
+                query = query.Where(s => s.Medecins.Nom_Service == nomService);
             }
 
-            var result = await query.Include(s => s.Sites).Include(s => s.Service_Employe).ToListAsync();
+            var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
@@ -86,25 +86,25 @@ namespace SalarieContrôleur
 
 
         [HttpGet("rechercheService")] //Recherche par Service
-        public async Task<ActionResult<IEnumerable<Medecins>>> GetSalariesByService(string Nom_Service)
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetSalariesByService(string Nom_Service)
         {
-            IQueryable<Medecins> query = _SalarieContext.Salaries;
+            IQueryable<RendezVous> query = _SalarieContext.Salaries;
 
 
             if (!string.IsNullOrEmpty(Nom_Service))
             {
-                query = query.Where(s => s.Service_Employe.Nom_Service == Nom_Service);
+                query = query.Where(s => s.Medecins.Nom_Service == Nom_Service);
             }
 
 
 
-            var result = await query.Include(s => s.Sites).Include(s => s.Service_Employe).ToListAsync();
+            var result = await query.Include(s => s.Sites).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
 
         [HttpGet("{id}")] //recherche by id Salarie
-        public async Task<ActionResult<Medecins>> GetSalarieById(int ID)
+        public async Task<ActionResult<RendezVous>> GetSalarieById(int ID)
         {
             var salarie = await _SalarieContext.Salaries.Where(c => c.IdMedecin.Equals(ID)).FirstOrDefaultAsync();
             if (salarie == null)
@@ -115,11 +115,11 @@ namespace SalarieContrôleur
         }
 
         [HttpPost] //insert salarie
-        public async Task<ActionResult<Medecins>> CreateSalarie(Ajout_Salaries ajoutSalarie)
+        public async Task<ActionResult<RendezVous>> CreateSalarie(Ajout_Salaries ajoutSalarie)
         {
             try
             {
-                Medecins salarie = new Medecins
+                RendezVous salarie = new RendezVous
                 {
                     Nom = ajoutSalarie.Nom,
                     Prenom = ajoutSalarie.Prenom,
@@ -158,7 +158,7 @@ namespace SalarieContrôleur
         }
 
         [HttpPut("{id}")] //Mettre à jour by ID
-        public async Task<IActionResult> UpdateSalarie(int ID, Medecins salarie)
+        public async Task<IActionResult> UpdateSalarie(int ID, RendezVous salarie)
         {
             if (!ID.Equals(salarie.IDSalaries))
             {

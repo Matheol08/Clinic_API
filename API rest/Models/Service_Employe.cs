@@ -1,15 +1,21 @@
 ﻿using ModelsSalarie;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsService
 {
-    public class Service_Employe
+    public class Medecins
     {
-        [Required][Key]
-        public int IDService { get; set; }
-        public string Nom_Service { get; set; }
 
-  
+        [Required]
+        [Key]
+
+        public int IdMedecin { get; set; }
+        public string Nom { get; set; }
+        public string Prenom { get; set; }
+        [ForeignKey("Specialites")]
+        public int SpecialiteId { get; set; }
+
     }
 
 }

@@ -6,18 +6,19 @@ using System.Security.Policy;
 
 namespace ModelsSalarie
 {
-    public class Medecins
+    public class RendezVous
     {
-
         [Required]
         [Key]
+        public int IdRendezVous { get; set; }
+        [ForeignKey("IdPatient")]
+        public int IdPatient { get; set; }
+        [ForeignKey("IdMedecin")]
 
-        public int IdMedecin { get; set; }
-        public string Nom { get; set; }
-        public string Prenom { get; set; }
-        [ForeignKey("Specialites")]
-        public int SpecialiteId { get; set; }
-
+        public int MedecinId { get; set; }
+        public DateTime DateDebut { get; set; }
+        public DateTime DateFin { get; set; }
+        public string InfosComplementaires { get; set; }
     }
 
 

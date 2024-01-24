@@ -4,13 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelsSite
 {
-    public class Sites
+    public class Specialites
     {
-        [Required][Key]
-        public int IDSite { get; set; }
-        public string Ville { get; set; }
-        public string Statut_Site { get; set; }
-      
+        [Required]
+        [Key]
+        public int IdSpecialite { get; set; }
+        public string Libelle { get; set; }
+
+
     }
 
 }
