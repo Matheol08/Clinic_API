@@ -11,7 +11,7 @@ builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.Re
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<ISalarieService, SalarieService>();
-builder.Services.AddDbContext<AnnuaireContext>(options =>
+builder.Services.AddDbContext<ClinicContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 }

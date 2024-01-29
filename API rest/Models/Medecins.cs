@@ -1,4 +1,5 @@
 ﻿
+using ModelsSpecialites;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,8 @@ namespace ModelsMedecins
         public string Prenom { get; set; }
         [ForeignKey("Specialites")]
         public int SpecialiteId { get; set; }
+        public virtual Specialites Specialites { get; set; }
+
 
     }
 

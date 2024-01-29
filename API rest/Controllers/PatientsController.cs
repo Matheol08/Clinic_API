@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelsPatients;
 
-    namespace PatientsContrôleurs
+    namespace PatientsContrôller
 {
         [ApiController]
         [Route("api/Patients")]
@@ -24,9 +24,9 @@ using ModelsPatients;
                 }
 
                 [HttpGet("{id}")]
-                public async Task<ActionResult<Patients>> GetPatientsById(int ID)
+                public async Task<ActionResult<Patients>> GetPatientsById(int id)
                 {
-                    var Patients = await _contextPatients.Patients.Where(c => c.IdPatient.Equals(ID)).FirstOrDefaultAsync();
+                    var Patients = await _contextPatients.Patients.Where(c => c.IdPatient.Equals(id)).FirstOrDefaultAsync();
                     if (Patients == null)
                     {
                         return NotFound();
@@ -42,21 +42,21 @@ using ModelsPatients;
                     return CreatedAtAction(nameof(GetPatientsById), new { id = Patients.IdPatient }, Patients);
                 }
 
-                [HttpDelete("{id}")] //Delete by ID un service
-                public async Task<IActionResult> DeletePatients(int ID)
+                [HttpDelete("{id}")] 
+                public async Task<IActionResult> DeletePatients(int id)
                 {
-                    var serviceEmploye = await _contextPatients.Patients.FindAsync(ID);
-                    if (serviceEmploye == null)
+                    var Patients = await _contextPatients.Patients.FindAsync(id);
+                    if (Patients == null)
                     {
                         return NotFound();
                     }
-                    _contextPatients.Patients.Remove(serviceEmploye);
+                    _contextPatients.Patients.Remove(Patients);
                     await _contextPatients.SaveChangesAsync();
                     return NoContent();
                 }
 
                 [HttpPut("{id}")]
-                public async Task<IActionResult> UpdateServiceEmploye(int id, Patients Patients)
+                public async Task<IActionResult> UpdatePatient(int id, Patients Patients)
                 {
                     if (!id.Equals(Patients.IdPatient))
                     {

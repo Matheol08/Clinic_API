@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using API_rest.Contexts;
 using ModelsSpecialites;
 using ModelsRendezVous;
-namespace SiteContrôleur
+namespace SpecialitesController
 {
     [ApiController]
     [Route("api/Specialites")]
 
-    public class SpecialitesContrôller1 : ControllerBase
+    public class SpecialitesContrôller : ControllerBase
     {
 
 
         private readonly ClinicContext _SpecialitesContext;
 
-        public SpecialitesContrôller1(ClinicContext context)
+        public SpecialitesContrôller(ClinicContext context)
         {
             _SpecialitesContext = context;
 
@@ -30,9 +30,9 @@ namespace SiteContrôleur
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Specialites>> GetSpecialitesById(int ID)
+        public async Task<ActionResult<Specialites>> GetSpecialitesByid(int id)
         {
-              var Specialites = await _SpecialitesContext.Specialites.Where(c => c.IdSpecialite.Equals(ID)).FirstOrDefaultAsync();
+              var Specialites = await _SpecialitesContext.Specialites.Where(c => c.IdSpecialite.Equals(id)).FirstOrDefaultAsync();
             if (Specialites == null) 
             {
                 return NotFound();
@@ -46,14 +46,14 @@ namespace SiteContrôleur
         {
             _SpecialitesContext.Specialites.Add(Specialites);
             await _SpecialitesContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetSpecialitesById), new { id = Specialites.IdSpecialite }, Specialites);
+            return CreatedAtAction(nameof(GetSpecialitesByid), new { id = Specialites.IdSpecialite }, Specialites);
         }
 
         [HttpDelete("{id}")]
 
-        public async Task<IActionResult> DeleteSpecialites(int ID)
+        public async Task<IActionResult> DeleteSpecialites(int id)
         {
-            var Specialites = await _SpecialitesContext.Specialites.FindAsync(ID);   
+            var Specialites = await _SpecialitesContext.Specialites.FindAsync(id);   
             if (Specialites == null)
             {
                 return NotFound();
@@ -66,17 +66,17 @@ namespace SiteContrôleur
 
         [HttpPut("{id}")] 
         
-        public async Task<IActionResult> UpdateSite(int ID, Specialites Specialites)
+        public async Task<IActionResult> UpdateSite(int id, Specialites Specialites)
         {
 
-            if (!ID.Equals(Specialites.IdSpecialite))
+            if (!id.Equals(Specialites.IdSpecialite))
             {
-                return BadRequest("ID's are different");   
+                return BadRequest("id's are different");   
             }
-            var Specialitestoupdate = await _SpecialitesContext.Specialites.FindAsync(ID);
+            var Specialitestoupdate = await _SpecialitesContext.Specialites.FindAsync(id);
             if (Specialitestoupdate == null)
             {
-                return NotFound($"Site with Id ={ID} not found");
+                return NotFound($"Site with id ={id} not found");
             }
             Specialitestoupdate.Libelle = Specialites.Libelle;
             await _SpecialitesContext.SaveChangesAsync();

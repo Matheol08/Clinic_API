@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Azure;
 using ModelsPatients;
+using Microsoft.IdentityModel.Tokens;
 
 namespace RendezVousController
 {
@@ -32,51 +33,49 @@ namespace RendezVousController
         }
 
 
-        [HttpGet("Date")]// Date
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussBySearchTerm(string searchTerm)
+        [HttpGet("DateRange")]
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussByDateRange(DateTime startDate, DateTime endDate)
         {
             IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                query = query.Where(s => EF.Functions.Like(s.Nom, searchTerm + "%") || EF.Functions.Like(s.Prenom, searchTerm + "%"));
-            }
+            query = query.Where(s => s.DateDebut >= startDate && s.DateFin <= endDate);
 
-            var result = await query.Include(s => s.IdPatient).Include(s => s.MedecinId).ToListAsync();
+            var result = await query.Include(s => s.Patients).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
+
 
 
         [HttpGet("recherchePatient")]
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVousByPatients(string NomPatient)
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVousByPatients(string PatientNom)
         {
             IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
-            
-            if (!string.IsNullOrEmpty(NomPatient))
+            if (!string.IsNullOrEmpty(PatientNom))
             {
-                query = query.Where(s => s.Patients.Patients == NomPatient);
+                
+                query = query.Where(s => s.Patients.Nom == PatientNom);
             }
-            
 
-                var result = await query.Include(s => s.IdPatient).Include(s => s.MedecinId).ToListAsync();
+            var result = await query.Include(s => s.Patients).Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
-        [HttpGet("recherchePatientsEtMedecin)")] 
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussBySiteAndService(string Libelle, string nomMedecin)
+
+        [HttpGet("recherchePatientsEtMedecins")]
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussByMedcinsetPatients(string patientNom, string medecinNom)
         {
             IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
-            if (!string.IsNullOrEmpty(Libelle))
+            if (!string.IsNullOrEmpty(patientNom))
             {
-                query = query.Where(s => s.IdPatient.Nom == Libelle);
+                query = query.Where(s => s.Patients.Nom == patientNom);
             }
 
-            if (!string.IsNullOrEmpty(nomMedecin))
+            if (!string.IsNullOrEmpty(medecinNom))
             {
-                query = query.Where(s => s.MedecinId.Nom == nomMedecin);
+                query = query.Where(s => s.Medecins.Nom == medecinNom);
             }
 
             var result = await query.Include(s => s.Patients).Include(s => s.Medecins).ToListAsync();
@@ -86,28 +85,29 @@ namespace RendezVousController
 
 
 
+
         [HttpGet("rechercheMedecin")] //Recherche par Medecin
-        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussByService(string Nom)
+        public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVousparMedecin(string medecinNom)
         {
             IQueryable<RendezVous> query = _RendezVousContext.RendezVous;
 
 
-            if (!string.IsNullOrEmpty(Nom))
+            if (!string.IsNullOrEmpty(medecinNom))
             {
-                query = query.Where(s => s.IdMedecin.Nom == Nom);
+                query = query.Where(s => s.Medecins.Nom == medecinNom);
             }
 
 
 
-            var result = await query.Include(s => s.Specialites).Include(s => s.Medecins).ToListAsync();
+            var result = await query.Include(s => s.Medecins).ToListAsync();
 
             return Ok(result);
         }
 
-        [HttpGet("{id}")] //recherche by id RendezVous
-        public async Task<ActionResult<RendezVous>> GetRendezVousById(int ID)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RendezVous>> GetRendezVousById(int id)
         {
-            var RendezVous = await _RendezVousContext.RendezVous.Where(c => c.IdRendezVous.Equals(ID)).FirstOrDefaultAsync();
+            var RendezVous = await _RendezVousContext.RendezVous.Where(c => c.IdRendezVous.Equals(id)).FirstOrDefaultAsync();
             if (RendezVous == null)
             {
                 return NotFound();
@@ -122,7 +122,7 @@ namespace RendezVousController
             {
                 RendezVous ajoutRendezVous = new RendezVous
                 {
-                    IdPatient = RendezVous.IdPatient,
+                    PatientId = RendezVous.PatientId,
                     MedecinId = RendezVous.MedecinId,
                     DateDebut = RendezVous.DateDebut,
                     DateFin = RendezVous.DateFin,
@@ -143,10 +143,10 @@ namespace RendezVousController
 
 
 
-        [HttpDelete("{id}")] //Delete by ID
-        public async Task<IActionResult> DeleteRendezVous(int ID)
+        [HttpDelete("{id}")] 
+        public async Task<IActionResult> DeleteRendezVous(int id)
         {
-            var RendezVous = await _RendezVousContext.RendezVous.FindAsync(ID);
+            var RendezVous = await _RendezVousContext.RendezVous.FindAsync(id);
             if (RendezVous == null)
             {
                 return NotFound();
@@ -156,19 +156,19 @@ namespace RendezVousController
             return NoContent();
         }
 
-        [HttpPut("{id}")] //Mettre à jour by ID
-        public async Task<IActionResult> UpdateRendezVous(int ID, RendezVous RendezVous)
+        [HttpPut("{id}")] 
+        public async Task<IActionResult> UpdateRendezVous(int id, RendezVous RendezVous)
         {
-            if (!ID.Equals(RendezVous.IdRendezVous))
+            if (!id.Equals(RendezVous.IdRendezVous))
             {
                 return BadRequest("ID's are different");
             }
-            var RendezVousToUpdate = await _RendezVousContext.RendezVous.FindAsync(ID);
+            var RendezVousToUpdate = await _RendezVousContext.RendezVous.FindAsync(id);
             if (RendezVousToUpdate == null)
             {
-                return NotFound($"RendezVous with Id ={ID} not found");
+                return NotFound($"RendezVous with Id ={id} not found");
             }
-            RendezVousToUpdate.IdPatient = RendezVous.IdPatient;
+            RendezVousToUpdate.PatientId = RendezVous.PatientId;
             RendezVousToUpdate.MedecinId = RendezVous.MedecinId;
             RendezVousToUpdate.DateDebut = RendezVous.DateDebut;
             RendezVousToUpdate.DateFin = RendezVous.DateFin;

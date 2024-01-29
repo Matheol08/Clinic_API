@@ -15,7 +15,7 @@ namespace API_rest
         public void ConfigureServices(IServiceCollection services)
         {
             // Configuration du contexte de base de données
-            services.AddDbContext<AnnuaireContext>(options =>
+            services.AddDbContext<ClinicContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
