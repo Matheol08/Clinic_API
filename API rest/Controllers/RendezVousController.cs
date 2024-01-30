@@ -33,6 +33,29 @@ namespace RendezVousController
         }
 
 
+        [HttpGet("MedecinEnRendezVous")]
+        public async Task<ActionResult<bool>> MedecinEnRendezVous(int medecinId, DateTime startDateTime, DateTime endDateTime)
+        {
+            try
+            {
+                var existingAppointments = await _RendezVousContext.RendezVous
+                    .Where(r => r.MedecinId == medecinId &&
+                                r.DateDebut < endDateTime &&
+                                r.DateFin > startDateTime)
+                    .ToListAsync();
+
+                bool isAvailable = existingAppointments.Count == 0;
+
+                return Ok(isAvailable);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Une erreur s'est produite : {ex.Message}");
+            }
+        }
+
+
+
         [HttpGet("DateRange")]
         public async Task<ActionResult<IEnumerable<RendezVous>>> GetRendezVoussByDateRange(DateTime startDate, DateTime endDate)
         {
