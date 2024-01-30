@@ -34,16 +34,18 @@ namespace RendezVousController
 
 
         [HttpGet("MedecinEnRendezVous")]
-        public async Task<ActionResult<bool>> MedecinEnRendezVous(int medecinId, DateTime startDateTime, DateTime endDateTime)
+        public async Task<ActionResult<bool>> MedecinEnRendezVous(int medecinId, DateTime rendezVousDate)
         {
             try
             {
+                // Recherchez les rendez-vous du médecin pour la date spécifiée
                 var existingAppointments = await _RendezVousContext.RendezVous
                     .Where(r => r.MedecinId == medecinId &&
-                                r.DateDebut < endDateTime &&
-                                r.DateFin > startDateTime)
+                                r.DateDebut.Date <= rendezVousDate.Date && // Vérifie si la date du rendez-vous commence le jour spécifié ou avant
+                                r.DateFin.Date >= rendezVousDate.Date)     // Vérifie si la date du rendez-vous se termine le jour spécifié ou après
                     .ToListAsync();
 
+                // Si des rendez-vous sont trouvés pour le médecin à la date spécifiée, le médecin n'est pas disponible
                 bool isAvailable = existingAppointments.Count == 0;
 
                 return Ok(isAvailable);
@@ -53,6 +55,7 @@ namespace RendezVousController
                 return StatusCode(500, $"Une erreur s'est produite : {ex.Message}");
             }
         }
+
 
 
 
@@ -122,7 +125,7 @@ namespace RendezVousController
 
 
 
-            var result = await query.Include(s => s.Medecins).ToListAsync();
+            var result = await query.Include(s => s.Medecins).Include(s => s.Patients).ToListAsync();
 
             return Ok(result);
         }

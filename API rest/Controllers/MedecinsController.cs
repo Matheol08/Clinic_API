@@ -20,7 +20,10 @@ using ModelsMedecins;
                 [HttpGet] 
                 public async Task<ActionResult<IEnumerable<Medecins>>> GetMedecins()
                 {
-                    return await _contextMedecins.Medecins.ToListAsync();
+                 var Medecins = await _contextMedecins.Medecins
+                .Include(s => s.Specialites)
+                .ToListAsync();
+                return await _contextMedecins.Medecins.ToListAsync();
                 }
 
                 [HttpGet("{id}")]
@@ -34,15 +37,16 @@ using ModelsMedecins;
                     return Ok(Medecins);
                 }
 
-                [HttpPost] 
-                public async Task<ActionResult<Medecins>> CreateMedecins(Medecins Medecins)
-                {
-                    _contextMedecins.Medecins.Add(Medecins);
-                    await _contextMedecins.SaveChangesAsync();
-                    return CreatedAtAction(nameof(GetMedecinsparId), new { id = Medecins.IdMedecin }, Medecins);
-                }
+        [HttpPost] 
+        public async Task<ActionResult<Medecins>> CreateMedecins(Medecins Medecins)
+        {
+            _contextMedecins.Medecins.Add(Medecins);
+            await _contextMedecins.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetMedecinsparId), new { id = Medecins.IdMedecin }, Medecins);
+        }
 
-                [HttpDelete("{id}")]
+
+        [HttpDelete("{id}")]
                 public async Task<IActionResult> DeleteMedecins(int id)
                 {
                     var Medecins = await _contextMedecins.Medecins.FindAsync(id);
