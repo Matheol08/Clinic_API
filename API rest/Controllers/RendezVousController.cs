@@ -1,12 +1,7 @@
 ﻿using API_rest.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using ModelsRendezVous;
-using ModelsMedecins;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Azure;
-using ModelsPatients;
-using Microsoft.IdentityModel.Tokens;
 
 namespace RendezVousController
 {

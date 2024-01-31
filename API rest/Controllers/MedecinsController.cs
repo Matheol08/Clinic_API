@@ -37,7 +37,7 @@ using ModelsMedecins;
                     return Ok(Medecins);
                 }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<ActionResult<Medecins>> CreateMedecins(Medecins Medecins)
         {
             _contextMedecins.Medecins.Add(Medecins);

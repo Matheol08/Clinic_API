@@ -15,7 +15,7 @@ namespace API_rest.Controllers
         {
             _Admin_Employes = context;
         }
-        [HttpGet("verificationAdmin")] //recherche du mdp en bdd et vérif admin
+        [HttpGet("verificationAdmin")] 
         public async Task<ActionResult<string>> VerificationAdmin([FromQuery] int idadmin, [FromQuery] string valeurSaisie)
         {
             try

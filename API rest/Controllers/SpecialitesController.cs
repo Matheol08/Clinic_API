@@ -50,18 +50,25 @@ namespace SpecialitesController
         }
 
         [HttpDelete("{id}")]
-
         public async Task<IActionResult> DeleteSpecialites(int id)
         {
-            var Specialites = await _SpecialitesContext.Specialites.FindAsync(id);   
-            if (Specialites == null)
+            var specialite = await _SpecialitesContext.Specialites.FindAsync(id);
+            if (specialite == null)
             {
                 return NotFound();
             }
-            _SpecialitesContext.Specialites.Remove(Specialites);
+
+            var medecinAffecte = await _SpecialitesContext.Medecins.FirstOrDefaultAsync(m => m.SpecialiteId == id);
+            if (medecinAffecte != null)
+            {
+                return BadRequest("La spécialité est assignée à un médecin et ne peut pas être supprimée.");
+            }
+
+            _SpecialitesContext.Specialites.Remove(specialite);
             await _SpecialitesContext.SaveChangesAsync();
             return NoContent();
         }
+
 
 
         [HttpPut("{id}")] 
