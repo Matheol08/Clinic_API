@@ -25,6 +25,18 @@ namespace ModelsRendezVous
         public DateTime DateFin { get; set; }
         public string InfosComplementaires { get; set; }
     }
+    public class ajoutRendezVous
+    {
+        public int IdRendezVous { get; set; }
+        [ForeignKey("Patients")]
+        public int PatientId { get; set; }
 
+        [ForeignKey("Medecins")]
+
+        public int MedecinId { get; set; }
+        public DateTime DateDebut { get; set; }
+        public DateTime DateFin { get; set; }
+        public string InfosComplementaires { get; set; }
+    }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ModelsPatients
 {
@@ -12,4 +13,5 @@ namespace ModelsPatients
         public string Telephone { get; set; }
         public string Email { get; set; }
     }
+
 }

@@ -136,12 +136,14 @@ namespace RendezVousController
             return Ok(RendezVous);
         }
 
-        [HttpPost] 
-        public async Task<ActionResult<RendezVous>> CreateRendezVous(RendezVous RendezVous)
+
+        [HttpPost]
+        public async Task<ActionResult<RendezVous>> CreateRendezVous(ajoutRendezVous RendezVous)
         {
             try
             {
-                RendezVous ajoutRendezVous = new RendezVous
+                // Convertissez Ajout_Salaries en Salaries
+                RendezVous ajoutrdv = new RendezVous
                 {
                     PatientId = RendezVous.PatientId,
                     MedecinId = RendezVous.MedecinId,
@@ -150,18 +152,18 @@ namespace RendezVousController
                     InfosComplementaires = RendezVous.InfosComplementaires
                 };
 
-                _RendezVousContext.RendezVous.Add(RendezVous);
+                _RendezVousContext.RendezVous.Add(ajoutrdv);
                 await _RendezVousContext.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetRendezVousById), new { id = RendezVous.IdRendezVous }, RendezVous);
+                return CreatedAtAction(nameof(GetRendezVousById), new { id = ajoutrdv.IdRendezVous }, ajoutrdv);
             }
             catch (Exception ex)
             {
+                // Ajoutez une journalisation pour déboguer les erreurs
                 Console.WriteLine($"Erreur lors de la création du salarié : {ex.Message}");
                 return StatusCode(500, $"Une erreur s'est produite lors de la création du salarié : {ex.Message}");
             }
         }
-
 
 
         [HttpDelete("{id}")] 

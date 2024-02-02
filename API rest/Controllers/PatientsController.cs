@@ -54,8 +54,8 @@ using ModelsPatients;
                     await _contextPatients.SaveChangesAsync();
                     return NoContent();
                 }
-
-                [HttpPut("{id}")]
+       
+        [HttpPut("{id}")]
                 public async Task<IActionResult> UpdatePatient(int id, Patients Patients)
                 {
                     if (!id.Equals(Patients.IdPatient))
@@ -67,8 +67,12 @@ using ModelsPatients;
                     {
                         return NotFound($"Patients with Id ={id} not found");
                     }
-            PatientsToUpdate.Nom = PatientsToUpdate.Nom;
-                    await _contextPatients.SaveChangesAsync();
+
+                     PatientsToUpdate.Nom = Patients.Nom;
+                     PatientsToUpdate.Prenom = Patients.Prenom;
+                     PatientsToUpdate.Email = Patients.Email;
+                     PatientsToUpdate.Telephone = Patients.Telephone;
+            await _contextPatients.SaveChangesAsync();
                     return NoContent();
                 }
             }
