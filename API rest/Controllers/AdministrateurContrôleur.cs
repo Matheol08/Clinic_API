@@ -1,7 +1,5 @@
 ﻿using API_rest.Contexts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ModelsAdmin;
 namespace API_rest.Controllers
 {
     [ApiController]
